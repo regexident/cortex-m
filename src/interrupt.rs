@@ -16,7 +16,7 @@ pub use bare_metal::{CriticalSection, Mutex};
 /// and must always return the same value (do not change at runtime).
 ///
 /// These requirements ensure safe nesting of critical sections.
-pub unsafe trait InterruptNumber: Into<u16> {}
+pub unsafe trait InterruptNumber: Into<u16> + Copy {}
 
 /// Disables all interrupts
 #[inline]

@@ -139,8 +139,8 @@ impl NVIC {
         #[cfg(armv6m)]
         {
             // NOTE(unsafe) atomic read with no side effects
-            let ipr_n = unsafe { (*Self::ptr()).ipr[Self::ipr_index(&interrupt)].read() };
-            let prio = (ipr_n >> Self::ipr_shift(&interrupt)) & 0x0000_00ff;
+            let ipr_n = unsafe { (*Self::ptr()).ipr[Self::ipr_index(interrupt)].read() };
+            let prio = (ipr_n >> Self::ipr_shift(interrupt)) & 0x0000_00ff;
             prio as u8
         }
     }
@@ -222,9 +222,9 @@ impl NVIC {
 
         #[cfg(armv6m)]
         {
-            self.ipr[Self::ipr_index(&interrupt)].modify(|value| {
-                let mask = 0x0000_00ff << Self::ipr_shift(&interrupt);
-                let prio = u32::from(prio) << Self::ipr_shift(&interrupt);
+            self.ipr[Self::ipr_index(interrupt)].modify(|value| {
+                let mask = 0x0000_00ff << Self::ipr_shift(interrupt);
+                let prio = u32::from(prio) << Self::ipr_shift(interrupt);
 
                 (value & !mask) | prio
             })
@@ -245,7 +245,7 @@ impl NVIC {
 
     #[cfg(armv6m)]
     #[inline]
-    fn ipr_index<I>(interrupt: &I) -> usize
+    fn ipr_index<I>(interrupt: I) -> usize
     where
         I: InterruptNumber,
     {
@@ -254,7 +254,7 @@ impl NVIC {
 
     #[cfg(armv6m)]
     #[inline]
-    fn ipr_shift<I>(interrupt: &I) -> usize
+    fn ipr_shift<I>(interrupt: I) -> usize
     where
         I: InterruptNumber,
     {
